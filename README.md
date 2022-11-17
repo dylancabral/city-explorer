@@ -5,28 +5,29 @@ City Explorer
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
-<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
+This application uses apis to locate map data and relay it to a form
 
 ## Getting Started
-<!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
+create a webpage integrated with react, using axios take imformation from the api and store it in states so that it can be rendered as the user inputs information they want to pull
 
 ## Architecture
 <!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
+the Apis are delivered through axios to our reactjavascript, using html and css the style and format is rendered onto the webpage 
 
 ## Change Log
-<!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an example:
-
-01-01-2001 4:59pm - Application now has a fully-functional express server, with a GET route for the location resource. -->
+2:05 11/17/22 lab 06 functionality is present with working latitude and longitude as well as a rendered map based off user input
 
 ## Credit and Collaborations
-<!-- Give credit (and a link) to other people or resources that helped you build this application. -->
+thank you to ricardo soto, keyan, tabor, ian shirley, and justin hammerly
 
 Name of feature: lab 06
 
 Estimate of time needed to complete: 5 hrs
 
-Start time: 4:16 11-12-2022
+Start time: 4:16 11-14-2022
 
-Finish time: _____
+Finish time: 2:05 11-17-22
 
-Actual time needed to complete: _____
+Actual time needed to complete:3 days with
+
+![data flow lab 06](dataflow.png)
