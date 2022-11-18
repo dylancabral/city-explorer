@@ -31,3 +31,6 @@ Finish time: 2:05 11-17-22
 Actual time needed to complete:3 days with
 
 ![data flow lab 06](dataflow.png)
+![data flow lab 07](dataflow2.png)
+![data flow lab 08](dataflow3.png)
+![data flow lab 09](dataflow4.png)
