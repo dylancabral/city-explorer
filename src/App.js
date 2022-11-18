@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import Alert from 'react-bootstrap/Alert';
+import e from 'express';
 
 class App extends React.Component {
   constructor(props) {
@@ -13,7 +14,9 @@ class App extends React.Component {
       name: '',
       showCityData: false,
       isError: false,
-      errorMessage: ''
+      errorMessage: '',
+      WeatherData: [],
+      movieData: []
     }
   }
 
@@ -39,18 +42,36 @@ class App extends React.Component {
     } catch (error) {
       // console.log('error: ', error);
       //     console.log('error.message: ', error.message);
-          this.setState({
-            errorMessage : error.message,
-            isError: true
-          })
+      this.setState({
+        errorMessage: error.message,
+        isError: true
+      })
     }
-}
+  }
 
 
 
   handleCityInput = (e) => {
     this.setState({
       city: e.target.value
+    });
+  };
+
+
+  handleGetWeather = async (e) => {
+    e.preventDefault();
+    let weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather?queriedLat=${this.state.lat}&queriedLon=${this.state.lon}`);
+    this.setState({
+      WeatherData: weather.data 
+    });
+  };
+
+  handleGetMovie = async (e) => {
+    e.preventDefault();
+    let movie = await axios.get(`${process.env.REACT_APP_SERVER}/movies?queriedMovie=${this.state.city}`)
+    this.setState({
+      movieData: movie.data
+ 
     });
   };
 
@@ -89,7 +110,7 @@ class App extends React.Component {
           </Table>
         }
         <div id="mapURL">
-        {this.state.showCityData && <img src={mapURL} alt='City Map'/>}
+          {this.state.showCityData && <img src={mapURL} alt='City Map' />}
         </div>
 
       </>
