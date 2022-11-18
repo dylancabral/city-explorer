@@ -2,7 +2,6 @@ import axios from 'axios';
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import Alert from 'react-bootstrap/Alert';
-import e from 'express';
 
 class App extends React.Component {
   constructor(props) {
@@ -38,7 +37,8 @@ class App extends React.Component {
         showCityData: true,
         isError: false,
         isAlertShown: false,
-      });
+      }, this.handleApi);
+
     } catch (error) {
       // console.log('error: ', error);
       //     console.log('error.message: ', error.message);
@@ -57,23 +57,28 @@ class App extends React.Component {
     });
   };
 
-
-  handleGetWeather = async (e) => {
-    e.preventDefault();
-    let weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather?queriedLat=${this.state.lat}&queriedLon=${this.state.lon}`);
-    this.setState({
-      WeatherData: weather.data 
-    });
+  handleApi= () =>{
+    this.handleGetWeather();
+    this.handleGetMovie();
   };
 
-  handleGetMovie = async (e) => {
-    e.preventDefault();
+  handleGetMovie = async () => {
     let movie = await axios.get(`${process.env.REACT_APP_SERVER}/movies?queriedMovie=${this.state.city}`)
     this.setState({
       movieData: movie.data
  
-    });
+    })
   };
+
+  handleGetWeather = async () => {
+    console.log('here');
+    let weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather?lat=${this.state.lat}&lon=${this.state.lon}`);
+    this.setState({
+      WeatherData: weather.data 
+    })
+  };
+
+ 
 
 
 
