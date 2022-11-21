@@ -63,7 +63,7 @@ class Main extends React.Component {
       console.log('retreiving information');
       this.setState({
         location: storage[this.state.searchQuery].display_name,
-        latitudeitude: storage[this.state.searchQuery].latitudeitude,
+        latitude: storage[this.state.searchQuery].latitude,
         longitude: storage[this.state.searchQuery].longitude,
         displayMap: true,
         displayError: false
