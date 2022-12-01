@@ -34,7 +34,7 @@ class Main extends React.Component {
 
 
 
-  handleCitySubmit = async () => {
+  handleCitySubmit = async (e) => {
     if (storage[this.state.searchQuery] === undefined) {
       console.log('getting location')
       const url = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONS}&q=${this.state.city}&format=json`;
@@ -43,8 +43,8 @@ class Main extends React.Component {
         location = await axios.get(url);
         console.log('got my location', { location })
         this.setState({
-          longitude: location.data[0].longitude,
-          latitude: location.data[0].latitude,
+          longitude: location.data[0].lon,
+          latitude: location.data[0].lat,
           name: location.data[0].display_name,
           displayMap: true,
           displayError: false
@@ -70,13 +70,13 @@ class Main extends React.Component {
 
       })
     }
-    this.handleGetWeather();
+    this.getWeather();
     this.handleGetMovie();
   }
 
-
   handleGetMovie = async () => {
     try {
+      console.log()
       const movie = await axios.get(`${process.env.REACT_APP_SERVER}/movies`, { params: { city: this.state.searchQuery } });
       this.setState({
         movie: movie.data
@@ -93,11 +93,13 @@ class Main extends React.Component {
 
 
 
-  handleGetWeather = async () => {
+  getWeather = async () => {
     try {
+      console.log({ params: { latitude: this.state.latitude, longitude: this.state.longitude } })
       const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather`, { params: { latitude: this.state.latitude, longitude: this.state.longitude } });
       this.setState({
         weather: weather.data
+        
       });
     } catch (error) {
       console.log('error in weather', error)
@@ -142,7 +144,7 @@ class Main extends React.Component {
                 />
               </Col>
             </Row>
-            <Row>
+            <Row> 
               <Col>
                 <Weather
                   weather={this.state.weather}
