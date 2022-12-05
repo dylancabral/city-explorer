@@ -15,12 +15,16 @@ class Movies extends React.Component {
           </h3>{this.props.movie.length && this.props.movie.map((movie,index) =>(
             <Movie 
             key={index}
-            movie={movie} 
+            title={movie.title}
+            description={movie.overview}
+            src={movie.image_url}
+            popularity={movie.popularity}
+            release_date={movie.release_date} 
             />
           ))}
         </CardGroup>
       </div>
-    )
+    );
   }
 }
 
