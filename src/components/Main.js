@@ -6,11 +6,9 @@ import Map from './Map'
 import Weather from './Weather';
 import Movies from './Movies';
 import { Container, Row, Col } from 'react-bootstrap'
-import { response } from "express";
 
 const storage = {}
 console.log({ storage });
-
 
 class Main extends React.Component {
   constructor(props) {
@@ -57,7 +55,7 @@ class Main extends React.Component {
           }
         });
     }
-  }
+  };
 
 
   updateCity = (event) => {
@@ -67,7 +65,6 @@ class Main extends React.Component {
 
 
   getWeather = async (lat, lon) => {
-    // try {
     const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`
     // const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather`, { params: { latitude: this.state.latitude, longitude: this.state.longitude } });
     axios
@@ -78,7 +75,6 @@ class Main extends React.Component {
       })
       .catch(error => {
         this.setState({ error: error });
-
       });
   }
 
