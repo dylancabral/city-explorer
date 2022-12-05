@@ -28,9 +28,6 @@ class Main extends React.Component {
     };
   }
 
-
-
-
   getLocation = async () => {
     if (storage[this.state.searchQuery] === undefined) {
       console.log('getting location')
@@ -60,42 +57,8 @@ class Main extends React.Component {
           }
         });
     }
-  };
+  }
 
-  // try {
-  //   location = await axios.get(url);
-  //   console.log('got my location', { location })
-  //   this.setState({
-  //     longitude: location.data[0].longitude,
-  //     latitude: location.data[0].latitude,
-  //     name: location.data[0].display_name,
-  //     displayMap: true,
-  //     displayError: false
-  //   });
-  //   storage[this.state.searchQuery] = location.data[0];
-  // } catch (error) {
-  //   // console.log('error: ', error);
-  //   //     console.log('error.message: ', error.message);
-  //   this.setState({
-  //     displayMap: false,
-  //     displayError: true,
-  //     errorMessage: error.response.status + ': ' + error.response.data.error
-  //   });
-  // }
-  // } else {
-  //   console.log('retreiving information');
-  //   this.setState({
-  //     location: storage[this.state.searchQuery].display_name,
-  //     latitude: storage[this.state.searchQuery].latitude,
-  //     longitude: storage[this.state.searchQuery].longitude,
-  //     displayMap: true,
-  //     displayError: false
-
-  //   })
-  // }
-  // this.handleGetWeather();
-  // this.handleGetMovie();
-  //   }
 
   updateCity = (event) => {
     this.setState({ searchQuery: event.target.value });
@@ -115,17 +78,9 @@ class Main extends React.Component {
       })
       .catch(error => {
         this.setState({ error: error });
+
       });
   }
-  //   } catch (error) {
-  //     console.log('error in weather', error)
-  //     this.setState({
-  //       displayMap: false,
-  //       displayError: true,
-  //       errorMessage: error.response.status + ': ' + error.response.data.error
-  //     })
-  //   }
-  // }
 
   getMovie = async () => {
     const url = `${process.env.REACT_APP_SERVER}/movies?location=${this.state.location}`
@@ -140,23 +95,6 @@ class Main extends React.Component {
         this.setState({ error: error });
       });
   };
-  // try {
-  //     const movie = await axios.get(`${process.env.REACT_APP_SERVER}/movies`, { params: { city: this.state.searchQuery } });
-  //     this.setState({
-  //       movie: movie.data
-  //     });
-  //   } catch (error) {
-  //     this.setState({
-  //       displayMap: false,
-  //       displayError: true,
-  //       errorMessage: error.response.status + ': ' + error.response.data.error
-  //     });
-  //   }
-  // }
-
-
-
-
 
   render() {
     return (
@@ -191,7 +129,7 @@ class Main extends React.Component {
                 />
               </Col>
             </Row>
-            <Row>
+            <Row> 
               <Col>
                 <Weather
                   weather={this.state.weather}
