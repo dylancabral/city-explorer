@@ -1,13 +1,13 @@
-import axios from "axios";
+import axios from 'axios';
 import React from 'react';
-import CitySearch from './CitySearch'
-import Lat from './Lat'
-import Map from './Map'
+import CitySearch from './CitySearch';
+import Lat from './Lat';
+import Map from './Map';
 import Weather from './Weather';
 import Movies from './Movies';
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Col } from 'react-bootstrap';
 
-const storage = {}
+const storage = {};
 console.log({ storage });
 
 class Main extends React.Component {
@@ -20,77 +20,108 @@ class Main extends React.Component {
       location: {},
       latitude: '',
       longitude: '',
-      error: null,
+      //error: null,
       weather: [],
-      movie: []
+      movie: [],
     };
   }
 
-  getLocation = async () => {
+  updateCity = e => {
+    this.setState({
+      searchQuery: e.target.value,
+    });
+  };
+
+  getCityLocation = async () => {
     if (storage[this.state.searchQuery] === undefined) {
-      console.log('getting location')
-      const url = `https://us1.locationiq.com/v1/search.php?key=${process.env.REACT_APP_LOCATIONS}&q=${this.state.searchQuery}&format=json`;
-      // let location;
-      axios
-        .get(url)
-        .then(response => {
-          let locationData = response.data[0];
-          this.setState({
-            location: response.data[0],
-            longitude: locationData.lon,
-            latitude: locationData.lat,
-            displayMap: true,
-            displayError: false
-          });
-          this.getWeather(locationData.lat, locationData.lon);
-          this.getMovie();
-        })
-        .catch(error => {
-          if (error.response) {
-            let message = `${error.response.data.error}. ${error.message}${error.code}`;
-            this.setState({
-              error: { staus: error.response, message: message },
-              location: {}
-            });
-          }
+      console.log('getting location');
+      console.log('here is your search query:', this.searchQuery);
+      const locationUrl = `https://us1.locationiq.com/v1/search?key=${process.env.REACT_APP_LOCATIONS}&q=${this.state.searchQuery}&format=json`;
+      let location;
+      console.log('here is my location', location, locationUrl);
+      try {
+        location = await axios.get(locationUrl);
+        //console.log('got my location', { location });
+        this.setState({
+          name: location.data[0].display_name,
+          latitude: location.data[0].lat,
+          longitude: location.data[0].lon,
+          displayMap: true,
+          displayError: false,
         });
+        storage[this.state.searchQuery] = location.data[0];
+      } catch (error) {
+        console.log('error getting LOCATION!');
+        // console.log('error: ', error);
+        //     console.log('error.message: ', error.message);
+        this.setState({
+          displayMap: false,
+          displayError: true,
+          errorMessage:
+            error.response.status + ': ' + error.response.data.error,
+        });
+      }
+    } else {
+      console.log('retrieving information');
+      this.setState({
+        location: storage[this.state.searchQuery].display_name,
+        latitude: storage[this.state.searchQuery].lat,
+        longitude: storage[this.state.searchQuery].lon,
+        displayMap: true,
+        displayError: false,
+      });
+    }
+    this.getWeather();
+    this.getMovie();
+  };
+
+  getWeather = async () => {
+    // const lat = this.state.latitude;
+    // const lon = this.state.longitude;
+    try {
+      let forecastData = await axios.get(
+        `${process.env.REACT_APP_SERVER}/weather`,
+        { params: { lat: this.state.latitude, lon: this.state.longitude } }
+      );
+      console.log('here is your weather', forecastData);
+      this.setState({
+        weather: forecastData.data,
+      });
+    } catch (error) {
+      console.log('error in WEATHER!', error);
+      this.setState({
+        //weather: [],
+        displayMap: false,
+        displayError: true,
+        errorMessage: error.response.status + ': ' + error.response.data.error,
+      });
     }
   };
 
-
-  updateCity = (event) => {
-    this.setState({ searchQuery: event.target.value });
-    console.log(this.state.searchQuery);
-  };
-
-
-  getWeather = async (lat, lon) => {
-    const url = `${process.env.REACT_APP_SERVER}/weather?lat=${lat}&lon=${lon}`
-    // const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather`, { params: { latitude: this.state.latitude, longitude: this.state.longitude } });
-    axios
-      .get(url)
-      .then(response => {
-        console.log(response);
-        this.setState({ weather: response.data });
-      })
-      .catch(error => {
-        this.setState({ error: error });
-      });
-  }
-
   getMovie = async () => {
-    const url = `${process.env.REACT_APP_SERVER}/movies?location=${this.state.location}`
-    // const weather = await axios.get(`${process.env.REACT_APP_SERVER}/weather`, { params: { latitude: this.state.latitude, longitude: this.state.longitude } });
-    axios
-      .get(url)
-      .then(response => {
-        console.log('I am movie response', response.data);
-        this.setState({ movie: response.data });
-      })
-      .catch(error => {
-        this.setState({ error: error });
+    //let cityName = this.state.location.display_name.split(',')[0];
+    //console.log(cityName);
+    try {
+      const movieData = await axios.get(
+        `${process.env.REACT_APP_SERVER}/movies`,
+        { params: { city: this.state.searchQuery } }
+      );
+      console.log('here are your movies!', movieData);
+      this.setState({
+        movie: movieData.data,
       });
+    } catch (error) {
+      console.log('error in MOVIES');
+      this.setState({
+        displayError: true,
+        errorMessage: error.response.status + ': ' + error.response.data.error,
+      });
+    }
   };
+
+  // searchedCity = location => {
+  //   this.setState({ searchQuery: location }, this.getLocation);
+  // };
 
   render() {
     return (
@@ -98,8 +129,9 @@ class Main extends React.Component {
         <Row>
           <Col>
             <CitySearch
-              updateCity={this.updateCity}
-              handleCitySubmit={this.getLocation}
+              handleUpdateCity={this.updateCity}
+              handleGetCity={this.getCityLocation}
+              // searchedCity={this.searchedCity}
               errorMessage={this.state.errorMessage}
               displayError={this.state.displayError}
             />
@@ -110,8 +142,8 @@ class Main extends React.Component {
             <Row>
               <Col>
                 <Lat
-                  query={this.state.searchQuery}
                   city={this.state.location}
+                  query={this.state.searchQuery}
                   lat={this.state.latitude}
                   lon={this.state.longitude}
                 />
@@ -120,31 +152,28 @@ class Main extends React.Component {
             <Row>
               <Col>
                 <Map
-                  // img_url={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONS}&center=${this.state.latitude},${this.state.longitude}&size=${window.innerWidth}x300&format=jpg&zoom=12`}
+                  img_url={`https://maps.locationiq.com/v3/staticmap?key=${process.env.REACT_APP_LOCATIONS}&center=${this.state.latitude},${this.state.longitude}&size=${window.innerWidth}x300&format=jpg&zoom=12`}
                   city={this.state.location}
+                  //displayMap={this.state.displayMap}
                 />
               </Col>
             </Row>
-            <Row> 
+            <Row>
               <Col>
                 <Weather
                   weather={this.state.weather}
+                  city={this.state.location}
                 />
               </Col>
               <Col>
-                <Movies
-                  movie={this.state.movie}
-                />
+                <Movies movie={this.state.movie} city={this.state.location} />
               </Col>
             </Row>
-
           </>
         )}
       </Container>
-    )
+    );
   }
 }
+
 export default Main;
-
-
-
