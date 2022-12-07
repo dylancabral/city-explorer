@@ -14,7 +14,7 @@ class CitySearch extends React.Component {
         <Form.Group className='mb-3' controlId='cityName'>
           <Form.Label>What City Are You Trying to Check Out?</Form.Label>
           <Form.Control
-            onChange={this.props.updateCity}
+            onChange={this.props.handleUpdateCity}
             type='text'
             placeholder='explore a city!'
           />

@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 
 class DailyWeather extends React.Component {
   render() {
-    console.log('The Forecast: ', this.props.weather);
+    console.log('The Forecast: ', this.props.day);
     return (
       <Card style={{ width: '18rem' }}>
         <Card.Header>{this.props.day.time}</Card.Header>
