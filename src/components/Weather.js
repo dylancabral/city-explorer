@@ -7,13 +7,11 @@ class Weather extends React.Component {
   render() {
     return (
       <div>
-        <CardGroup>
           <h3>Weather for: {this.props.city}</h3>
           {this.props.weather.length &&
             this.props.weather.map((day, index) => (
-              <DailyWeather key={index} day={day} />
+              <DailyWeather class="weather" key={index} day={day} />
             ))}
-        </CardGroup>
       </div>
     );
   }

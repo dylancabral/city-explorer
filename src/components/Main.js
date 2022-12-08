@@ -5,7 +5,7 @@ import Lat from './Lat';
 import Map from './Map';
 import Weather from './Weather';
 import Movies from './Movies';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, CardGroup } from 'react-bootstrap';
 
 
 const storage = {};
@@ -195,21 +195,22 @@ class Main extends React.Component {
             </Row>
           </>
         )}{this.state.displayWeather && (
-          <Row>
-            <Col>
-              <Weather
-                weather={this.state.weather}
-                city={this.state.searchQuery}
-              />
-            </Col>
-          </Row>
+
+          <Weather
+            weather={this.state.weather}
+            city={this.state.searchQuery}
+          />
+
         )}
         {this.state.displayMovies && (
-          <Row>
-            <Col>
-              <Movies movie={this.state.movie} city={this.state.searchQuery} />
-            </Col>
-          </Row>
+        <>
+        <h3>Movies Showing here</h3>
+          <CardGroup>
+              
+            <Movies movie={this.state.movie} city={this.state.searchQuery} />
+
+          </CardGroup>
+          </>
         )}
       </Container>
     );
