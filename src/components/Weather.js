@@ -1,6 +1,5 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import CardGroup from 'react-bootstrap/CardGroup';
 import DailyWeather from './DailyWeather';
 
 class Weather extends React.Component {
